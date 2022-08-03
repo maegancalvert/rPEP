@@ -1,0 +1,152 @@
+# ========================================
+# ========================================
+# Maegan Calvert, PhD (2022)
+# Univ. of Arkansas for Medical Sciences
+# Brain Imaging Research Center (BIRC)
+#
+# Mentor and Code Contributions: Keith Bush, PhD
+# ========================================
+# ========================================
+
+# ----------------------------------------
+# ----------------------------------------
+    OVERVIEW:
+# ----------------------------------------
+# ----------------------------------------
+
+This project is the analysis pipeline used to conduct the
+"Real-time fMRI and Neurofeedback of Brain Networks Mediating Trauma Memory Recall in PTSD"
+study funded by the Arkansas Science and Technology Authority (ASTA)
+Basic Science Research Award, 15-B-30.
+
+
+# ----------------------------------------
+# ----------------------------------------
+    INTRODUCTION:
+# ----------------------------------------
+# ----------------------------------------
+
+The purpose of this code is to perform the following tasks:
+
+1) Preprocess fMRI, psychophysiological, and cognitive-behaviorial
+data for the project using best practices (and document literature of
+each step).
+
+2) Construct beta-series (Rissman, 2004) features for each data type
+where relevant (fMRI,SCR).
+
+# ----------------------------------------
+# ----------------------------------------
+    DATA SOURCES:
+# ----------------------------------------
+# ----------------------------------------
+
+Anonymized data is available upon request.
+
+# ----------------------------------------
+# ----------------------------------------
+    PROJECT OVERVIEW:
+# ----------------------------------------
+# ----------------------------------------
+
+/rPEP
+
+    /fig
+        # where plots are stored
+
+    /log
+        # where statistical findings are stored
+
+    /source
+        rPEP_Project.py         # all project parameters
+        Gather_events_data.py   # creating dictionaries of all data by subject
+
+        /analysis
+            # contains code for statistical tests and plotting
+        /betas
+            # beta_series extraction
+            # scripts for all data types
+        /process
+            # preprocessing scripts for all data types
+            # https://github.com/kabush/rPEP2bids
+
+    /subj_lists
+        # stores test file listing the included subjects
+        # for each study being used in this project analysis
+
+# ----------------------------------------
+# ----------------------------------------
+    REQUIRED TOOLS
+# ----------------------------------------
+# ----------------------------------------
+
+matlab (Tested only for R2016B)
+    - statistical analysis toolbox
+    - parallel computing toolbox
+
+python 3.9.5
+
+AFNI (Version AFNI_18.2.06)
+
+FSL (5.0.9)
+
+# ----------------------------------------
+# ----------------------------------------
+    REQUIRED LIBRARIES
+# ----------------------------------------
+# ----------------------------------------
+
+fmriprep
+    https://fmriprep.org/en/stable/
+
+kablab
+    https://github.com/kabush/kablab
+
+scralyze
+    http://pspm.sourceforge.net/
+
+# ----------------------------------------
+# ----------------------------------------
+    TO Run fmriprep
+# ----------------------------------------
+# ----------------------------------------
+
+# Prep the data directories
+mkdir ../data/rPEP
+mkdir ../data/rPEP/derivatives
+
+# Runs base preprocessing of rPEP project
+run preprocessing (https://github.com/kabush/rPEP_preproc)
+run fmriprep (https://github.com/kabush/rPEP2bids)
+
+# -----------------------------------------------
+# -----------------------------------------------
+    Order of scripts to be run for main analyses
+# -----------------------------------------------
+# -----------------------------------------------
+# run preprocessing
+# run fmriprep
+./source/rPEP_Project.py
+./source/Gather_Events.py
+./source/init_project.m
+./source/rPEP_scr_Project.py
+./betas/calc_scr_ex_beta.m (these will use the functions in convolve_scrv2.m, scr_dsgn_preprocv2.m, scr_preprocv2.m)
+./source/rPEP_intermediate_data.py
+./analysis/run_glm.m (this will run the rt-fmri-nf glm as well as the scr glm)
+./analysis/hyperplane_simple_effects.py
+./analysis/scr_simple_effects.py
+./analysis/calc_simple_effects.py
+./analysis/Figures.py
+
+# --------------------------------------------------------
+# --------------------------------------------------------
+    Order of scripts to be run for supplementary analyses
+# --------------------------------------------------------
+# --------------------------------------------------------
+./analysis/rPEP_descriptives.py
+./source/process/gm_mask_process_afni
+./analysis/calc_residuals.py
+./analysis/calc_fmri_3dlme.py
+./analysis/calc_3dlme_cluster_thresh.py
+./analysis/create_cluster_table_from_AFNI.py
+./analysis/afni_script.py
